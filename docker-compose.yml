@@ -8,9 +8,10 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./src:/var/www/
+      - ./src:/var/www/html
     depends_on:
       - mysql
+      - php
   mysql: 
     image: mysql:8
     ports:
@@ -22,3 +23,11 @@ services:
        MYSQL_ROOT_PASSWORD: secret
     volumes:
       - ./mysql:/var/lib/mysql
+
+  php:
+    build:
+      context: .
+      dockerfile: php.dockerfile
+    volumes:
+      - ./src:/var/www/html
+      
