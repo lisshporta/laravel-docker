@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+  
   nginx:
     build: 
       context: .
@@ -12,6 +13,7 @@ services:
     depends_on:
       - mysql
       - php
+  
   mysql: 
     image: mysql:8
     ports:
@@ -27,9 +29,13 @@ services:
   php:
     build:
       context: .
+      # args:
+      #   - PHPUSER=${PHPUSER}
+      #   - PHPGROUP=${PHPGROUP}
       dockerfile: php.dockerfile
     volumes:
       - ./src:/var/www/html
+  
   composer:
     build:
       context: .
@@ -37,4 +43,21 @@ services:
     volumes:
       - ./src:/var/www/html
     working_dir: /var/www/html
-      
+
+  npm:
+    image: node:current-alpine
+    volumes:
+      - ./src:/var/www/html
+    entrypoint: ["npm"]
+    working_dir: /var/www/html
+
+  artisan:
+    build:
+      context: .
+      dockerfile: php.dockerfile
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    depends_on:
+      - mysql
+    entrypoint: ["php", "/var/www/html/artisan"] 
