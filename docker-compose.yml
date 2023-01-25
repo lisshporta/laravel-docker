@@ -16,22 +16,21 @@ services:
   
   mysql: 
     image: mysql:8
+    # env_file:
+    #   - data.env
     ports:
         - 3306:3306
     environment:
-       MYSQL_DATABASE: laravel
-       MYSQL_USER: laravel
-       MYSQL_PASSWORD: secret
-       MYSQL_ROOT_PASSWORD: secret
+       MYSQL_DATABASE: "${MYSQL_DATABASE}"
+       MYSQL_USER: "${MYSQL_USER}"
+       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
     volumes:
       - ./mysql:/var/lib/mysql
 
   php:
     build:
       context: .
-      # args:
-      #   - PHPUSER=${PHPUSER}
-      #   - PHPGROUP=${PHPGROUP}
       dockerfile: php.dockerfile
     volumes:
       - ./src:/var/www/html
